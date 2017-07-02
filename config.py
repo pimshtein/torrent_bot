@@ -11,3 +11,6 @@ login_param_rutracker = ''
 # settings to auth on qbittorrent api
 login_qbittorrent = ''
 pass_qbittorrent = ''
+
+# settings to save files
+save_path = ''

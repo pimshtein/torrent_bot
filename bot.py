@@ -97,8 +97,7 @@ def up(bot, update, args):
 
         data_download_qbit = {
             "urls": magnet[0],
-            "savepath": "/home/pimshtein/Видео/",
-            "category": "movies"
+            "savepath": config.save_path
         }
         download_qbit_result = session.post(
             download_qbit_url,
