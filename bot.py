@@ -86,8 +86,8 @@ def up(bot, update, args):
         # If was arg -u then get torrent link from concrete url
         url_command = '-u'
         if url_command in args:
-            url_index = args.index(url_command) + 1
-            url = concrete_url + args[url_index]
+            # Get value after param -u
+            url = concrete_url + args[args.index(url_command) + 1]
         else:
             # Get list torrents by query
             page = session.get(search_url % ' '.join(args))
