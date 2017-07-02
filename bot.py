@@ -107,7 +107,7 @@ def up(bot, update, args):
         )
         result = str(download_qbit_result) + str(data_download_qbit)
         if download_qbit_result.status_code == 200:
-            result = 'Загрузка началась'
+            result = 'Download started'
         bot.sendMessage(chat_id=update.message.chat_id, text=result)
 
 
