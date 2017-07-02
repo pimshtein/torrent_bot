@@ -39,10 +39,10 @@ def myid(bot, update):
 def up(bot, update, args):
     reload(config)
     user = str(update.message.from_user.id)
-    if user in config.admin:  # if user in admin list then do
+    if user in config.admin:  # if user in admin list then do it
         login_url = 'https://dostup.website/http://rutracker.org/forum/login.php'
         search_url = 'https://dostup.website/http://rutracker.org/forum/tracker.php?nm=%s'
-        concreteUrl = "https://dostup.website/http://rutracker.org/forum/%s"
+        concrete_url = "https://dostup.website/"
         login_qbit_url = "http://localhost:8080/login"
         download_qbit_url = "http://localhost:8080/command/download"
         post_headers = {
@@ -83,14 +83,21 @@ def up(bot, update, args):
         # Login url
         session.post(login_url, data=data, headers=post_headers)
 
-        # Get list torrents by query
-        page = session.get(search_url % ' '.join(args))
+        # If was arg -u then get torrent link from concrete url
+        url_command = '-u'
+        if url_command in args:
+            url_index = args.index(url_command) + 1
+            url = concrete_url + args[url_index]
+        else:
+            # Get list torrents by query
+            page = session.get(search_url % ' '.join(args))
 
-        tree = html.fromstring(page.content)
-        link = tree.xpath('//*[@id="tor-tbl"]/tbody/tr[1]/td[4]/div[1]/a/@href')
+            tree = html.fromstring(page.content)
+            link = tree.xpath('//*[@id="tor-tbl"]/tbody/tr[1]/td[4]/div[1]/a/@href')
+            url = concrete_url + 'http://rutracker.org/forum/%s' % link[0]
 
         # Get link to download torrent
-        concrete_page = session.get(concreteUrl % link[0])
+        concrete_page = session.get(url)
         concrete_tree = html.fromstring(concrete_page.content)
         magnet = concrete_tree.xpath("//a[@class='med magnet-link magnet-link-16']/@href")
 
@@ -141,6 +148,16 @@ def st(bot, update):
             result = str(query_qbit_result.content)
         bot.sendMessage(chat_id=update.message.chat_id, text=result)
 
+
+def test(bot, update, args):
+    reload(config)
+    user = str(update.message.from_user.id)
+    if user in config.admin:  # if user in admin list then do
+        url_command = '-u'
+        if url_command in args:
+            url = args.index(url_command) + 1
+        bot.sendMessage(chat_id=update.message.chat_id, text=args[url])
+
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 
@@ -152,6 +169,9 @@ dispatcher.add_handler(help_handler)
 
 up_handler = CommandHandler('up', up, pass_args=True)
 dispatcher.add_handler(up_handler)
+
+test_handler = CommandHandler('test', test, pass_args=True)
+dispatcher.add_handler(test_handler)
 
 status_handler = CommandHandler('st', st)
 dispatcher.add_handler(status_handler)
