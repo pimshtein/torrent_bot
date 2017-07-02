@@ -1,5 +1,7 @@
 ﻿#!/usr/bin/python
 # coding=utf-8
+import json
+
 import config  # config file
 from telegram.ext import CommandHandler
 from imp import reload  # module to up other modules
@@ -23,6 +25,7 @@ def h(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text='''List of available commands: 
     /id - id user to access to download torrents
     /up - download torrent
+    /st - statues of torrents
     ''')
 
 
@@ -110,6 +113,34 @@ def up(bot, update, args):
         bot.sendMessage(chat_id=update.message.chat_id, text=result)
 
 
+def st(bot, update):
+    reload(config)
+    user = str(update.message.from_user.id)
+    if user in config.admin:  # if user in admin list then do
+        login_qbit_url = "http://localhost:8080/login"
+        query_qbit_url = "http://localhost:8080/query/torrents"
+        post_headers_login = {
+            'Referer': 'http://localhost:8080',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        data_qbit = {
+            "username": config.login_qbittorrent,
+            "password": config.pass_qbittorrent
+        }
+
+        session = requests.Session()
+
+        # Run qbittorrent to download torrent
+        # Login
+        session.post(login_qbit_url, data=data_qbit, headers=post_headers_login)
+
+        query_qbit_result = session.get(query_qbit_url)
+        result = str(query_qbit_result.status_code)
+
+        if query_qbit_result.status_code == 200:
+            result = str(query_qbit_result.content)
+        bot.sendMessage(chat_id=update.message.chat_id, text=result)
+
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 
@@ -121,5 +152,8 @@ dispatcher.add_handler(help_handler)
 
 up_handler = CommandHandler('up', up, pass_args=True)
 dispatcher.add_handler(up_handler)
+
+status_handler = CommandHandler('st', st)
+dispatcher.add_handler(status_handler)
 
 updater.start_polling()
