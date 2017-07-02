@@ -1,7 +1,7 @@
 # Token
 token = ''
 # Users witch can use program
-admin = ['164486731']
+admin = ['']
 
 # settings to auth on rutracker
 login_rutracker = ''

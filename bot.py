@@ -15,14 +15,14 @@ dispatcher = updater.dispatcher
 
 
 def start(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text="Привет, я бот, жду команды")
+    bot.sendMessage(chat_id=update.message.chat_id, text="Hello! use /h to help")
 
 
 def h(bot, update):
     reload(config)
-    bot.sendMessage(chat_id=update.message.chat_id, text='''список доступных команд: 
-    /id - id пользователя
-    /up - скачать торрент
+    bot.sendMessage(chat_id=update.message.chat_id, text='''List of available commands: 
+    /id - id user to access to download torrents
+    /up - download torrent
     ''')
 
 
