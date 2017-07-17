@@ -8,7 +8,8 @@ git clone git@github.com:pimshtein/torrent_bot.git
 touch /etc/systemd/system/torrent-bot.service
 4. Change rights:
 chmod 664 /etc/systemd/system/torrent-bot.service
-5. Add to torrent-bot.service this content:
+5. Add to torrent-bot.service this content:  
+
 [Unit]  
 Description=Torrent bot  
 After=network.target  
