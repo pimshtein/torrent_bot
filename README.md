@@ -9,17 +9,17 @@ touch /etc/systemd/system/torrent-bot.service
 4. Change rights:
 chmod 664 /etc/systemd/system/torrent-bot.service
 5. Add to torrent-bot.service this content:
-[Unit]
-Description=Torrent bot
-After=network.target
-
-[Service]
-Type=simple
-User=user (on behalf of whom to run)
-ExecStart=path to bot.sh
-
-[Install]
-WantedBy=multi-user.target
+[Unit]  
+Description=Torrent bot  
+After=network.target  
+  
+[Service]  
+Type=simple  
+User=user (on behalf of whom to run)  
+ExecStart=path to bot.sh  
+  
+[Install]  
+WantedBy=multi-user.target  
 6. Write path to bot.py in bot.sh:
 python3 /your_path/bot.py
 
